@@ -33,7 +33,7 @@ import java.util.UUID;
 public class WidevineTestMediaDrmCallback implements MediaDrmCallback {
 
   private static final String WIDEVINE_GTS_DEFAULT_BASE_URI =
-      "https://proxy.uat.widevine.com/proxy";
+      "http://widevine-dash.ezdrm.com/proxy?pX=062C0D";
 
   private final String defaultUri;
 

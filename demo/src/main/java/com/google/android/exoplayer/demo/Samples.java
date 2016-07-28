@@ -135,17 +135,8 @@ import java.util.Locale;
   };
 
   public static final Sample[] WIDEVINE_H264_MP4_SECURE = new Sample[] {
-    new Sample("WV: Secure SD & HD (MP4,H264)", "", "widevine_test",
-        "https://storage.googleapis.com/wvmedia/cenc/h264/tears/tears.mpd",
-        Util.TYPE_DASH),
-    new Sample("WV: Secure SD (MP4,H264)", "", "widevine_test",
-        "https://storage.googleapis.com/wvmedia/cenc/h264/tears/tears_sd.mpd",
-        Util.TYPE_DASH),
-    new Sample("WV: Secure HD (MP4,H264)", "", "widevine_test",
-        "https://storage.googleapis.com/wvmedia/cenc/h264/tears/tears_hd.mpd",
-        Util.TYPE_DASH),
-    new Sample("WV: Secure UHD (MP4,H264)", "", "widevine_test",
-        "https://storage.googleapis.com/wvmedia/cenc/h264/tears/tears_uhd.mpd",
+    new Sample("Blim: Secure SD & HD (MP4,H264)", "", "Blim Test",
+        "http://dash.blim.com/PAID0000000000645292/dash/38969_49d2e702c63ff889ce6f468fec187494/mpds/38969.mpd?cb=144857964",
         Util.TYPE_DASH),
   };
 
