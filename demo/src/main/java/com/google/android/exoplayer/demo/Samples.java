@@ -136,7 +136,7 @@ import java.util.Locale;
 
   public static final Sample[] WIDEVINE_H264_MP4_SECURE = new Sample[] {
     new Sample("Blim: Secure SD & HD (MP4,H264)", "", "Blim Test",
-        "http://dash.blim.com/PAID0000000000645292/dash/38969_49d2e702c63ff889ce6f468fec187494/mpds/38969.mpd?cb=144857964",
+        "http://dash.blim.com/201402206635/dash/68820_74802ac4e4ed5910ef5b6437ef8a5688/mpds/68820.mpd?cb=145107346",
         Util.TYPE_DASH),
   };
 

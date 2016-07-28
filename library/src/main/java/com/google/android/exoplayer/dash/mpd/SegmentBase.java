@@ -284,6 +284,8 @@ public abstract class SegmentBase {
 
     private final String baseUrl;
 
+    private boolean strictMode = false;
+
     /**
      * @param initialization A {@link RangedUri} corresponding to initialization data, if such data
      *     exists. The value of this parameter is ignored if {@code initializationTemplate} is
@@ -306,12 +308,13 @@ public abstract class SegmentBase {
      */
     public SegmentTemplate(RangedUri initialization, long timescale, long presentationTimeOffset,
         int startNumber, long duration, List<SegmentTimelineElement> segmentTimeline,
-        UrlTemplate initializationTemplate, UrlTemplate mediaTemplate, String baseUrl) {
+        UrlTemplate initializationTemplate, UrlTemplate mediaTemplate, String baseUrl, boolean strictMode) {
       super(initialization, timescale, presentationTimeOffset, startNumber,
           duration, segmentTimeline);
       this.initializationTemplate = initializationTemplate;
       this.mediaTemplate = mediaTemplate;
       this.baseUrl = baseUrl;
+      this.strictMode = strictMode;
     }
 
     @Override
@@ -346,7 +349,11 @@ public abstract class SegmentBase {
         return DashSegmentIndex.INDEX_UNBOUNDED;
       } else {
         long durationUs = (duration * C.MICROS_PER_SECOND) / timescale;
-        return startNumber + (int) Util.ceilDivide(periodDurationUs, durationUs) - 1;
+        if (strictMode) {
+          return startNumber + (int) Util.ceilDivide(periodDurationUs, durationUs) - 2;
+        } else {
+          return startNumber + (int) Util.ceilDivide(periodDurationUs, durationUs) - 1;
+        }
       }
     }
 
