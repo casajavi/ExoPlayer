@@ -36,8 +36,13 @@ import com.google.android.exoplayer2.util.MimeTypes;
 import com.google.android.exoplayer2.util.UriUtil;
 import com.google.android.exoplayer2.util.Util;
 import com.google.android.exoplayer2.util.XmlPullParserUtil;
+
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +66,8 @@ public class DashManifestParser extends DefaultHandler
 
   private final String contentId;
   private final XmlPullParserFactory xmlParserFactory;
+
+  private boolean isBitmovin = false;
 
   /**
    * Equivalent to calling {@code new DashManifestParser(null)}.
@@ -86,8 +93,23 @@ public class DashManifestParser extends DefaultHandler
   @Override
   public DashManifest parse(Uri uri, InputStream inputStream) throws IOException {
     try {
+
+      ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+      byte[] buffer = new byte[1024];
+      int len;
+      while ((len = inputStream.read(buffer)) > -1 ) {
+        baos.write(buffer, 0, len);
+      }
+      baos.flush();
+
+
+      InputStream is1 = new ByteArrayInputStream(baos.toByteArray());
+      InputStream is2 = new ByteArrayInputStream(baos.toByteArray());
+      setBitmovin(is2);
+
       XmlPullParser xpp = xmlParserFactory.newPullParser();
-      xpp.setInput(inputStream, null);
+      xpp.setInput(is1, null);
       int eventType = xpp.next();
       if (eventType != XmlPullParser.START_TAG || !"MPD".equals(xpp.getName())) {
         throw new ParserException(
@@ -96,6 +118,29 @@ public class DashManifestParser extends DefaultHandler
       return parseMediaPresentationDescription(xpp, uri.toString());
     } catch (XmlPullParserException | ParseException e) {
       throw new ParserException(e);
+    }
+  }
+
+  private void setBitmovin(InputStream inputStream) {
+    BufferedReader r = new BufferedReader(new InputStreamReader(inputStream));
+    StringBuilder total;
+    try {
+      total = new StringBuilder(inputStream.available());
+      String line;
+      while ((line = r.readLine()) != null) {
+        total.append(line).append('\n');
+      }
+
+      String manifestString = total.toString();
+      String compareString = "bitmovin";
+
+      if (manifestString.toLowerCase().contains(compareString.toLowerCase())) {
+        isBitmovin = true;
+      } else {
+        isBitmovin = false;
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
     }
   }
 
@@ -562,7 +607,7 @@ public class DashManifestParser extends DefaultHandler
       List<SegmentTimelineElement> timeline, UrlTemplate initializationTemplate,
       UrlTemplate mediaTemplate, String baseUrl) {
     return new SegmentTemplate(initialization, timescale, presentationTimeOffset,
-        startNumber, duration, timeline, initializationTemplate, mediaTemplate, baseUrl);
+        startNumber, duration, timeline, initializationTemplate, mediaTemplate, baseUrl, isBitmovin);
   }
 
   protected List<SegmentTimelineElement> parseSegmentTimeline(XmlPullParser xpp)

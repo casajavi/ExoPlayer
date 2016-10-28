@@ -28,10 +28,10 @@
     "name": "Widevine DASH Policy Tests (GTS)",
     "samples": [
       {
-        "name": "WV: HDCP not specified",
-        "uri": "https://storage.googleapis.com/wvmedia/cenc/h264/tears/tears.mpd",
+        "name": "WV: Blim Example",
+        "uri": "http://dash.blim.com/201609173105/dash/400211_47a7ef722303f8a70fa54c517dcc5771/mpds/400211.mpd?cb=147466890",
         "drm_scheme": "widevine",
-        "drm_license_url": "https://proxy.uat.widevine.com/proxy?video_id=d286538032258a1c&provider=widevine_test"
+        "drm_license_url": "http://widevine-dash.ezdrm.com/proxy?pX=062C0D"
       },
       {
         "name": "WV: HDCP not required",
